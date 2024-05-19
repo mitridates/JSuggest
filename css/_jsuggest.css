@@ -1,0 +1,67 @@
+.jsuggest {
+    width: 100%;
+    position: initial;
+    display: inline-block;
+    z-index: 1;
+}
+.jsuggest > .false-input-container{
+    width: 100%;
+}
+.jsuggest > .false-input-container > .false-input{
+    width:inherit;
+    border-top-left-radius: .25rem!important;
+    border-bottom-left-radius: .25rem!important;
+}
+
+.jsuggest > .false-input-container > .clear{/* Clear con input reset */
+    position: absolute;
+    opacity: 0.5;
+    background-color: #e9ecef;
+    border-top-right-radius: .25rem!important;
+    border-bottom-right-radius: .25rem!important;
+    font-size: 1rem;
+    padding: 0 0.2rem;
+    line-height:  1;
+}
+.jsuggest > .false-input-container > .clear:hover {
+opacity: 1;
+}
+.jsuggest > .dropdown-content{
+    display: none;
+    position: absolute;
+    z-index: 1;
+    
+}
+.jsuggest > .dropdown-content > .real-input{
+    width: inherit;
+}
+.jsuggest > .dropdown-content > .autocomplete {
+    background: white;
+    overflow: auto;
+    box-sizing: border-box;
+    border: 1px solid rgba(50, 50, 50, 0.6);
+    border-radius: .25rem!important;
+    max-height: 20em; /* 20 lineas menos padding, margin... unos 15 resultados */
+    z-index: 1;
+
+}
+
+.jsuggest > .dropdown-content > .autocomplete * {
+    font: inherit;
+}
+
+.jsuggest > .dropdown-content > .autocomplete > div {
+    padding: 0.4em;
+    box-sizing: border-box;
+}
+
+.jsuggest > .dropdown-content > .autocomplete .group {
+    background: #eee;
+}
+
+.jsuggest > .dropdown-content > .autocomplete > div:hover,
+.jsuggest > .dropdown-content > .autocomplete > div.selected {
+    background-color: #a0f89d !important;
+    cursor: pointer;
+
+}
