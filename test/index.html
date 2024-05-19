@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="../css/_jsuggest.css">
+    <script type="text/javascript" src="../../JsonApi/src/JsonApiManager.1.0.2.js"></script>
+    <script type="text/javascript" src="../../JsonApi/src/JsonApiSpec.app.types.1.0.0.js"></script>
+
+    <title>JSuggest esm</title>
+</head>
+<body>
+    <main>
+        <h1 class="title">JSuggest esm<sub>v1.0.0</sub></h1>
+        <section>
+            <div>
+                <select class="testElement" style="width: 100%;">
+                    <option value="ESFNE00000" selected>Federación Nacional de Espeleología</option>
+                </select>
+             
+                <select class="testElement2" style="width: 100%;">
+                    <option value="ESFNE00000" selected>Federación loquesea de Espeleología</option>
+                </select>                
+            </div>
+        </section>
+        <section style="padding-top: 2em;">
+            <div>SEARCH LIST</div>
+            ----------------------
+            <div class="orgsElement"></div>
+        </section>
+
+    </main>
+<!--
+    <script src="../dist/JSuggest.iife.1.0.min.js"></script>
+    <script>
+        fetch("./organisations.json")
+        .then(response => response.json())
+        .then(json => {
+            let jam = (new JsonApiManager(json.data, json.included||null)).getParsed();
+            const testElm= document.querySelector('.testElement')
+            let test= new JSuggest(testElm, {fetch:{data: jam}});
+  
+        });
+//con url
+//    const testElm= document.querySelector('.testElement')
+//    let test= new JSuggest(testElm, {path: '/cavern/public/index.php/api/json/autocomplete/organisation'});
+    </script>
+    -->
+    <!--esm-->
+    <script type="module" src="index.mod.js"></script>
+</body>
+</html>
