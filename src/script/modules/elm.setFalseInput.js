@@ -2,7 +2,7 @@ import createElement from "./elm.createElement.js";
 /**
  * Initailize or reset false input
  * @param {HTMLElement} f   False input
- * @param {HTMLElement} el  Source element
+ * @param {HTMLSelectElement|HTMLInputElement} el  Source element
  */
 export default function setFalseInput(f,el)
 {

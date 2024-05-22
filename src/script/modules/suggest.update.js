@@ -12,6 +12,7 @@
         container= this.elms.container,
         vars= this.vars,
         config= this.config,
+        itemClickListener= listeners.itemClickListener.bind(this),
         fragment = document.createDocumentFragment(),
         div;
 
@@ -25,7 +26,7 @@
     vars.items.forEach(function (item, index) {
         div = renderItem(item, index);
         if (div) {
-            div.addEventListener("click", listeners.itemClickListener);
+            div.addEventListener("click", itemClickListener);
             fragment.appendChild(div);
         }
     });

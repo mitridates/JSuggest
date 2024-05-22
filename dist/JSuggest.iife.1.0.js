@@ -18,7 +18,7 @@ var JSuggest = (function () {
      * @var {JSON} vars
      * @var {JSuggest} vars.instance Current instance
      * @var {XMLHttpRequest|null} vars.req Current request if any
-     * @var {bool} vars.isOpen suggest is open
+     * @var {boolean} vars.isOpen suggest is open
      * @var {int} vars.selected selected item
      * @var {int} vars.keypressCounter control redrawing autocomplete multiple times after the last key press
      * @var {function|undefined} vars.debounceTimer timeout
@@ -69,16 +69,16 @@ var JSuggest = (function () {
      * @param {HTMLInputElement|HTMLSelectElement} src 
      */
     function setConfig(opt, src) {
-        let key, found; 
-
+        let key, found, ret={};
         //config in argguments || dataset
         for(key in config){
+            ret[key]= config[key];
             if((found = src.getAttribute('data-'+key))){
-                config[key]= found;
+                ret[key]= found;
             }
-            if(opt && opt.hasOwnProperty(key)) config[key]= opt[key];
+            if(opt && opt.hasOwnProperty(key)) ret[key]= opt[key];
         }
-        return config;
+        return ret;
     }
 
     /**
@@ -228,7 +228,7 @@ var JSuggest = (function () {
     /**
      * Initailize or reset false input
      * @param {HTMLElement} f   False input
-     * @param {HTMLElement} el  Source element
+     * @param {HTMLSelectElement|HTMLInputElement} el  Source element
      */
     function setFalseInput(f,el)
     {
@@ -420,6 +420,7 @@ var JSuggest = (function () {
             container= this.elms.container,
             vars= this.vars,
             config= this.config,
+            itemClickListener= l.itemClickListener.bind(this),
             fragment = document.createDocumentFragment(),
             div;
 
@@ -433,7 +434,7 @@ var JSuggest = (function () {
         vars.items.forEach(function (item, index) {
             div = renderItem(item, index);
             if (div) {
-                div.addEventListener("click", l.itemClickListener);
+                div.addEventListener("click", itemClickListener);
                 fragment.appendChild(div);
             }
         });
@@ -457,15 +458,16 @@ var JSuggest = (function () {
 
     /**
      * Filter static [JsonApiSpec] defined in options argument.
+     * @param config
      * @param {string} text
      * @return {JsonApiManager}
-      */
+     */
     function filter(config, text)
     {
         let data,i,defaults={
             /**
-             * @param {JsonApiSpec} a
-             * @param {string} b
+             * @param {JsonApiSpec} spec
+             * @param txt
              */        
             filterCb: (spec, txt)=>{//true if found
             return spec.toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").indexOf(txt.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,""))!==-1;
@@ -787,7 +789,7 @@ var JSuggest = (function () {
         itemClickListener: function(ev)
         {
             this.vars.selected = this.vars.items[ev.currentTarget.getAttribute('data-index')];
-            setItemValue(this.vars.selected, ev.currentTarget);
+            setItemValue.call(this, this.vars.selected, ev.currentTarget);
             clearItems.call(this);
             ev.preventDefault();
             ev.stopPropagation();
@@ -1190,19 +1192,19 @@ var JSuggest = (function () {
      * Create a suggest from request or from JSON file|inline data
      * @constructor
      * @param {String|Object} selector
-     * @param {Object|null} config
+     * @param {null|Object} opt
      *  <script>
      * import response from './organisations.json' assert { type: 'json' };
-     * 
+     *
      * //create a JsonApiManager instance from file
      * let jam = (new JsonApiManager(response.data, response.included||null)).getParsed();
-     * 
-     * 
+     *
+     *
      * const testElm= document.querySelector('.testElement')
-     * 
+     *
      *  //create JSuggest instance with fetch argument
      *  let test= new JSuggest(testElm, {fetch:jam});
-     *  
+     *
      * </script>
 
      */
@@ -1253,8 +1255,8 @@ var JSuggest = (function () {
         return this
     };
 
-    JSuggest.prototype.getInstance= function(){
-        return cache.get(el)
+    JSuggest.prototype.getInstance= function(el){
+        return JSuggest.cache.getInstance(el)
     };
 
     JSuggest.prototype.getSource= function(){
@@ -1264,6 +1266,8 @@ var JSuggest = (function () {
     JSuggest.cache= suggestCache;
     JSuggest.copy= copy;
     JSuggest.paste= paste;
+
+    window.JSuggest= JSuggest;
 
     return JSuggest;
 

@@ -16,7 +16,7 @@ let env=(function(ua){
  * @var {JSON} vars
  * @var {JSuggest} vars.instance Current instance
  * @var {XMLHttpRequest|null} vars.req Current request if any
- * @var {bool} vars.isOpen suggest is open
+ * @var {boolean} vars.isOpen suggest is open
  * @var {int} vars.selected selected item
  * @var {int} vars.keypressCounter control redrawing autocomplete multiple times after the last key press
  * @var {function|undefined} vars.debounceTimer timeout
@@ -83,16 +83,16 @@ export const config= {
  * @param {HTMLInputElement|HTMLSelectElement} src 
  */
 export function setConfig(opt, src) {
-    let key, found; 
-
+    let key, found, ret={};
     //config in argguments || dataset
     for(key in config){
+        ret[key]= config[key];
         if((found = src.getAttribute('data-'+key))){
-            config[key]= found
+            ret[key]= found;
         }
-        if(opt && opt.hasOwnProperty(key)) config[key]= opt[key]
+        if(opt && opt.hasOwnProperty(key)) ret[key]= opt[key];
     }
-    return config;
+    return ret;
 }
 
 export {vars, env};

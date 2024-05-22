@@ -16,19 +16,19 @@ import paste from "./modules/suggest.paste.js";
  * Create a suggest from request or from JSON file|inline data
  * @constructor
  * @param {String|Object} selector
- * @param {Object|null} config
+ * @param {null|Object} opt
  *  <script>
  * import response from './organisations.json' assert { type: 'json' };
- * 
+ *
  * //create a JsonApiManager instance from file
  * let jam = (new JsonApiManager(response.data, response.included||null)).getParsed();
- * 
- * 
+ *
+ *
  * const testElm= document.querySelector('.testElement')
- * 
+ *
  *  //create JSuggest instance with fetch argument
  *  let test= new JSuggest(testElm, {fetch:jam});
- *  
+ *
  * </script>
 
  */
@@ -79,8 +79,8 @@ JSuggest.prototype.update= function(){
     return this
 };
 
-JSuggest.prototype.getInstance= function(){
-    return cache.get(el)
+JSuggest.prototype.getInstance= function(el){
+    return JSuggest.cache.getInstance(el)
 };
 
 JSuggest.prototype.getSource= function(){
@@ -90,3 +90,5 @@ JSuggest.prototype.getSource= function(){
 JSuggest.cache= suggestCache;
 JSuggest.copy= copy;
 JSuggest.paste= paste;
+
+window.JSuggest= JSuggest;

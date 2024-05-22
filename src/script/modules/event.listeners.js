@@ -91,7 +91,7 @@ export default {
     itemClickListener: function(ev)
     {
         this.vars.selected = this.vars.items[ev.currentTarget.getAttribute('data-index')]
-        setItemValue(this.vars.selected, ev.currentTarget)
+        setItemValue.call(this, this.vars.selected, ev.currentTarget)
         clearItems.call(this);
         ev.preventDefault();
         ev.stopPropagation();

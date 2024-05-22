@@ -1,15 +1,16 @@
 /**
  * Filter static [JsonApiSpec] defined in options argument.
+ * @param config
  * @param {string} text
  * @return {JsonApiManager}
-  */
+ */
 export function filter(config, text)
 {
     let data,i,spec, 
     defaults={
         /**
-         * @param {JsonApiSpec} a
-         * @param {string} b
+         * @param {JsonApiSpec} spec
+         * @param txt
          */        
         filterCb: (spec, txt)=>{//true if found
         return spec.toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").indexOf(txt.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,""))!==-1;
