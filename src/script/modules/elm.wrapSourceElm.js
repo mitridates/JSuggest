@@ -1,5 +1,5 @@
 import createElement from "./elm.createElement.js";
-import {elms} from "./globals.js";
+import {updateDropDownWidth} from "./event.listeners.js";
 
 export default function wrapSourceElement(src, config)
 {
@@ -66,10 +66,7 @@ export default function wrapSourceElement(src, config)
 
     container.style.display= 'none'
 
-    //---
     falseGroup.appendChild(falseInput)
-    //falseGroup.appendChild(falseClear) problemas con bootstrap
-    //---
     //set custom width
     if(config.width){
         createElement(falseInput, {
@@ -77,7 +74,8 @@ export default function wrapSourceElement(src, config)
         })
 
     }
-    //--
+
+
     src.style.display= 'none'
     dropdowncontent.style.display= 'none'
     dropdown.appendChild(src)
@@ -90,15 +88,11 @@ export default function wrapSourceElement(src, config)
     src.setAttribute("data-jsuggest", 'true');
 
     window.addEventListener('load', function() {//prevent scroll bar
-        let rect= falseInput.getBoundingClientRect();
-        dropdowncontent.style.width=  rect.width+'px';
-        //falseClear.style.height= rect.height+'px';
+        updateDropDownWidth(falseInput, dropdowncontent);
     });
 
     window.addEventListener('resize', function() {//prevent scroll bar
-        let rect= falseInput.getBoundingClientRect();
-        dropdowncontent.style.width=  rect.width+'px';
-        //falseClear.style.height= rect.height+'px';
+        updateDropDownWidth(falseInput, dropdowncontent);
     });
 
     return {
@@ -107,7 +101,7 @@ export default function wrapSourceElement(src, config)
         container: container,
         dropdown: dropdown,
         dropdowncontent: dropdowncontent,
-        falseClear: null,//falseClear;
+        falseClear: null,
         falseInput: falseInput,
         parentNode: parentNode,
         realInput:realInput,

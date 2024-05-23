@@ -112,138 +112,6 @@ var JSuggest = (function () {
         return e;
     }
 
-    function wrapSourceElement(src, config)
-    {
-
-        let 
-            /**
-             * @var {HTMLElement} src 
-             */
-            parentNode =   src.parentNode,
-            dropdown= createElement$1("div", {
-                class: 'jsuggest'
-            }),
-            falseGroup= createElement$1("div", {
-                class: 'false-input-container',
-            }),
-    /*         falseClear= createElement("span", {//con bootstrap
-                class: 'input-group-text cursor-pointer',
-                style: {cursor: 'pointer'},
-                html: '&times;',
-            }), */
-    /*         falseClear= createElement("a", {//clear con css y rotatte
-                href:"JavaScript:Void(0);",
-                class:"clear",
-                tabindex:"0",
-                role:"button"
-            }), */
-    /*         falseClear= createElement("input", {//clear con input reset. No se lleva bien con boostrap
-                type: 'reset',
-                class:"clear",
-                tabindex:"0",
-                value: 'X'
-            }),  */       
-            falseInput= createElement$1("input", {
-                class: 'false-input form-control',
-                placeholder: config.placeholder,
-                type: 'search',
-            }),
-
-            dropdowncontent= createElement$1("div", {
-                class: 'dropdown-content',
-            }),
-            container= createElement$1("div", {
-                class: 'autocomplete',
-            }),
-            /**
-             * dropdown input HTMLElement
-             * @type {HTMLElement}
-             */
-            realInput = createElement$1('input', {
-                placeholder: config.searchPlaceholder.replace("minLength", config.minLen),
-                class: 'real-input form-control',
-                tabindex:-1,
-                autocomplete:"off",
-                autocorrect: "off",
-                autocapitalize: "off",
-                spellcheck: "false",
-                type: 'search',
-                role: "textbox"
-            });
-
-        //bypass html5 validation to false input
-        falseInput.required= src.required;
-        src.required= false;
-
-        container.style.display= 'none';
-
-        //---
-        falseGroup.appendChild(falseInput);
-        //falseGroup.appendChild(falseClear) problemas con bootstrap
-        //---
-        //set custom width
-        if(config.width){
-            createElement$1(falseInput, {
-                style: {width: config.width}
-            });
-
-        }
-        //--
-        src.style.display= 'none';
-        dropdowncontent.style.display= 'none';
-        dropdown.appendChild(src);
-        dropdown.appendChild(falseGroup);
-        dropdowncontent.appendChild(realInput);
-        dropdowncontent.appendChild(container);
-        dropdown.appendChild(dropdowncontent);
-        parentNode.appendChild(dropdown);
-        
-        src.setAttribute("data-jsuggest", 'true');
-
-        window.addEventListener('load', function() {//prevent scroll bar
-            let rect= falseInput.getBoundingClientRect();
-            dropdowncontent.style.width=  rect.width+'px';
-            //falseClear.style.height= rect.height+'px';
-        });
-
-        window.addEventListener('resize', function() {//prevent scroll bar
-            let rect= falseInput.getBoundingClientRect();
-            dropdowncontent.style.width=  rect.width+'px';
-            //falseClear.style.height= rect.height+'px';
-        });
-
-        return {
-            src: src,
-            copy:(src.nodeName.toLowerCase()==='select')? src.innerHTML : src.value,
-            container: container,
-            dropdown: dropdown,
-            dropdowncontent: dropdowncontent,
-            falseClear: null,//falseClear;
-            falseInput: falseInput,
-            parentNode: parentNode,
-            realInput:realInput,
-        }
-    }
-
-    /**
-     * Initailize or reset false input
-     * @param {HTMLElement} f   False input
-     * @param {HTMLSelectElement|HTMLInputElement} el  Source element
-     */
-    function setFalseInput(f,el)
-    {
-        let sel, type = el.nodeName.toLowerCase();
-        if(type === 'select'){
-            if(!el.options.length) return;
-            sel = el.options.selectedIndex;
-            createElement$1(f, {value: el.options[sel].text, title: el.options[sel].value + ' ' + el.options[sel].text });
-            f.value= el.options[sel].text;
-        }else if(type === 'input'){
-            createElement$1(f, {value: el.value, title: el.title + ' ' + el.value });
-            f.value= el.value;
-        }
-    }
-
     /**
      * @this {JSuggest}
      */
@@ -279,6 +147,25 @@ var JSuggest = (function () {
         src.title= '';
         }
         clearItems.call(this);
+    }
+
+    /**
+     * Initailize or reset false input
+     * @param {HTMLElement} f   False input
+     * @param {HTMLSelectElement|HTMLInputElement} el  Source element
+     */
+    function setFalseInput(f,el)
+    {
+        let sel, type = el.nodeName.toLowerCase();
+        if(type === 'select'){
+            if(!el.options.length) return;
+            sel = el.options.selectedIndex;
+            createElement$1(f, {value: el.options[sel].text, title: el.options[sel].value + ' ' + el.options[sel].text });
+            f.value= el.options[sel].text;
+        }else if(type === 'input'){
+            createElement$1(f, {value: el.value, title: el.title + ' ' + el.value });
+            f.value= el.value;
+        }
     }
 
     //#####    Singleton     ####
@@ -859,7 +746,7 @@ var JSuggest = (function () {
             createElement$1(this.elms.realInput, {value: ''}).focus();
             this.elms.falseInput.tabIndex= -1;
             // Para redimensionar
-            // n.dropdowncontent.style.width= '90%'
+            updateDropDownWidth(this.elms.falseInput, this.elms.dropdowncontent);
         },
 
         /**
@@ -908,6 +795,127 @@ var JSuggest = (function () {
         }
 
     };
+
+    function updateDropDownWidth(falseInput, dropdowncontent)
+    {
+        let rect= falseInput.getBoundingClientRect();
+        dropdowncontent.style.width=  rect.width+'px';
+    }
+
+    function wrapSourceElement(src, config)
+    {
+
+        let 
+            /**
+             * @var {HTMLElement} src 
+             */
+            parentNode =   src.parentNode,
+            dropdown= createElement$1("div", {
+                class: 'jsuggest'
+            }),
+            falseGroup= createElement$1("div", {
+                class: 'false-input-container',
+            }),
+    /*         falseClear= createElement("span", {//con bootstrap
+                class: 'input-group-text cursor-pointer',
+                style: {cursor: 'pointer'},
+                html: '&times;',
+            }), */
+    /*         falseClear= createElement("a", {//clear con css y rotatte
+                href:"JavaScript:Void(0);",
+                class:"clear",
+                tabindex:"0",
+                role:"button"
+            }), */
+    /*         falseClear= createElement("input", {//clear con input reset. No se lleva bien con boostrap
+                type: 'reset',
+                class:"clear",
+                tabindex:"0",
+                value: 'X'
+            }),  */       
+            falseInput= createElement$1("input", {
+                class: 'false-input form-control',
+                placeholder: config.placeholder,
+                type: 'search',
+            }),
+
+            dropdowncontent= createElement$1("div", {
+                class: 'dropdown-content',
+            }),
+            container= createElement$1("div", {
+                class: 'autocomplete',
+            }),
+            /**
+             * dropdown input HTMLElement
+             * @type {HTMLElement}
+             */
+            realInput = createElement$1('input', {
+                placeholder: config.searchPlaceholder.replace("minLength", config.minLen),
+                class: 'real-input form-control',
+                tabindex:-1,
+                autocomplete:"off",
+                autocorrect: "off",
+                autocapitalize: "off",
+                spellcheck: "false",
+                type: 'search',
+                role: "textbox"
+            });
+
+        //bypass html5 validation to false input
+        falseInput.required= src.required;
+        src.required= false;
+
+        container.style.display= 'none';
+
+        //---
+        falseGroup.appendChild(falseInput);
+        //falseGroup.appendChild(falseClear) problemas con bootstrap
+        //---
+        //set custom width
+        if(config.width){
+            createElement$1(falseInput, {
+                style: {width: config.width}
+            });
+
+        }
+        //--
+        src.style.display= 'none';
+        dropdowncontent.style.display= 'none';
+        dropdown.appendChild(src);
+        dropdown.appendChild(falseGroup);
+        dropdowncontent.appendChild(realInput);
+        dropdowncontent.appendChild(container);
+        dropdown.appendChild(dropdowncontent);
+        parentNode.appendChild(dropdown);
+        
+        src.setAttribute("data-jsuggest", 'true');
+
+        window.addEventListener('load', function() {//prevent scroll bar
+            updateDropDownWidth(falseInput, dropdowncontent);
+            // let rect= falseInput.getBoundingClientRect();
+            // dropdowncontent.style.width=  rect.width+'px';
+            //falseClear.style.height= rect.height+'px';
+        });
+
+        window.addEventListener('resize', function() {//prevent scroll bar
+            updateDropDownWidth(falseInput, dropdowncontent);
+            // let rect= falseInput.getBoundingClientRect();
+            // dropdowncontent.style.width=  rect.width+'px';
+            //falseClear.style.height= rect.height+'px';
+        });
+
+        return {
+            src: src,
+            copy:(src.nodeName.toLowerCase()==='select')? src.innerHTML : src.value,
+            container: container,
+            dropdown: dropdown,
+            dropdowncontent: dropdowncontent,
+            falseClear: null,//falseClear;
+            falseInput: falseInput,
+            parentNode: parentNode,
+            realInput:realInput,
+        }
+    }
 
     /**
      * Clear view and autocomplete state

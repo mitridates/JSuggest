@@ -7,7 +7,7 @@ import setItemValue from "./item.setItemValue.js"
 import updateSelected from "./item.updateSelected.js";
 import selectPrev from "./item.selectPrev.js";
 import selectNext from "./item.selectNext.js";
-    //########  EVENTS  ########//
+
 export default {
     /**
      * @param {Event} ev
@@ -118,13 +118,6 @@ export default {
             }
         }, 200);
     },
-    // /**@todo 
-    //  * @param {Event} ev
-    //  * @this JSuggest
-    //  */
-    // function resizeListener(ev) {
-    //     if (!!this.nodes.container.parentNode)  this.update()
-    // }
     /**
      * @param {Event} ev
      * @this JSuggest
@@ -161,13 +154,10 @@ export default {
         createElement(this.elms.realInput, {value: ''}).focus()
         this.elms.falseInput.tabIndex= -1
         // Para redimensionar
-        // n.dropdowncontent.style.width= '90%'
+        updateDropDownWidth(this.elms.falseInput, this.elms.dropdowncontent);
     },
 
     /**
-     * Para borrar los valores jsuggest en un formulario no vale con el.value=''
-     * Necesita document.querySelector('.jsuggest-false-input).dispatchEvent(new Event('change', {cancelable: true}));
-     * No consigo que lanzar el evento change de otra manera
      * @param {Event} ev
      * @this JSuggest
      * @returns void
@@ -210,3 +200,10 @@ export default {
     }
 
 };
+
+function updateDropDownWidth(falseInput, dropdowncontent)
+{
+    let rect= falseInput.getBoundingClientRect();
+    dropdowncontent.style.width=  rect.width+'px';
+}
+ export {updateDropDownWidth}

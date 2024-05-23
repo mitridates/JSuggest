@@ -31,7 +31,7 @@ export default (function() {
     /**
      * Get JsonApiSpec template if exists, else, use default toString method
      * @param {JsonApiSpec} spec
-     * @return {JSuggestFormatter|null}
+     * @return {function|null}
      */
     function getTemplate(spec){
         return (templates.hasOwnProperty(spec.type)) ? new templates[spec.type](spec) : null;

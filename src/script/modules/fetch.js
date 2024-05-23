@@ -15,14 +15,11 @@ export function clearDebounceTimer() {
  */
 export default function startFetch(trigger/*1== Focus, 0== other input Keyboard */) 
 {
-
     // if multiple keys were pressed, before we get update from server,
     // this may cause redrawing our autocomplete multiple times after the last key press.
     // to avoid this, the number of times keyboard was pressed will be
     // saved and checked before redraw our autocomplete box.
-    
-    
-    let val= this.elms.realInput.value, 
+    let val= this.elms.realInput.value,
     that= this,
     savedKeypressCounter= ++this.vars.keypressCounter;
 
@@ -53,9 +50,6 @@ export default function startFetch(trigger/*1== Focus, 0== other input Keyboard 
             }else{
                 console.log('Nada que buscar');
             }
-            
-
-
         }, trigger === 0 /* Keyboard */ ? that.config.debounceWaitMs : 300);
     }
     else {
@@ -77,16 +71,18 @@ export function fetchXhr(text, fetchCallback, trigger) {
 
     // abort request while typing
     try {this.vars.req.abort(); } catch(e){}
-    //new request
-    this.vars.req = xhr =  new XMLHttpRequest()
+
+    this.vars.req = xhr =  new XMLHttpRequest()//new request
+
     //responseType='json' ante una excepción sólo devuelve status y statusText
     //lo malo. En dev te resta información
     //lo bueno. En prod no muestra errores internos
+
     xhr.responseType='json'
 
     xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-            res= xhr.response
+            res= xhr;
             //para debug comentar xhr.responseType='json' y descomentar aquí
             //  res= xhr.response.hasOwnProperty('data')? xhr.response : JSON.parse(xhr.response),
             jam= new JsonApiManager(res.data, res.included)
@@ -97,7 +93,7 @@ export function fetchXhr(text, fetchCallback, trigger) {
             //     JError(xhr).show()
             // }else{
             alert(`Error ${xhr.status} : ${xhr.statusText}`)
-            // }_re
+            // }
         }
     };
 

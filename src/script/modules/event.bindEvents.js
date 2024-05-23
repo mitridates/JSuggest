@@ -12,7 +12,7 @@ export default function bindEvents()
         li[i]= l[i].bind(this);
      }
 
-    // setup event handlers
+    // add event handlers
     elms.container.addEventListener("focus", li.containerFocusListener);
     if(elms.hasOwnProperty('falseClear') && elms.falseClear) elms.falseClear.addEventListener("click", li.falseClearClickListener);
     elms.falseInput.addEventListener('search', li.falseClearClickListener);//nuevo

@@ -1,7 +1,6 @@
 import JSuggestCache from "./cache.js";
 import createElement from "./elm.createElement.js";
 /**
- * @todo hacer un evento para modificar retornar div con formatos...
  * @param {JsonApiSpec} spec
  * @param {int} index
  * @return {HTMLElement}
@@ -16,8 +15,7 @@ export default function renderItem(spec, index) {
      * @type {HTMLElement}
      */
     el= createElement('div', {
-        // 'data-jsuggest': JSON.stringify(spec),
-        // html:  html,
+        class:'jsuggest-item',
         style:{
             'font-size': '.7em'
         },

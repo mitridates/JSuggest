@@ -26,3 +26,4 @@ export default  function setValue(spec){
 
    setSourceValue.call(this, {id: spec.id, value: spec.toString()})
 }
+
