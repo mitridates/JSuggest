@@ -53,6 +53,7 @@ opacity: 1;
 .jsuggest > .dropdown-content > .autocomplete > div {
     padding: 0.4em;
     box-sizing: border-box;
+    font-size: 1em;
 }
 
 .jsuggest > .dropdown-content > .autocomplete .group {

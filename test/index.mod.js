@@ -39,11 +39,6 @@ jam.getParsed().forEach((spec)=>{
 * JSuggest.(selector, {path:string)})
 */
 //let test= new JSuggest(testElm, {path: '/cavern/public/index.php/api/json/autocomplete/organisation'});
-
-
-
-
-
 //console.log(test.copy());
 //console.log(test.focus());
 //console.log(test);
