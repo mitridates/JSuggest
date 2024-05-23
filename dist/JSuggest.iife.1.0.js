@@ -36,7 +36,7 @@ var JSuggest = (function () {
     /**
      * @constant {Object} config
      */
-    const config= {
+    let config= {
         /**  Sets the width of the container */
         width: null,
         /**
@@ -53,15 +53,11 @@ var JSuggest = (function () {
         method: 'POST',
         debounceWaitMs: 300,
         minLen: 3,
-        // maxHeight: 180,
         noResults: "No result found...",
         placeholder: '',
         searchPlaceholder: "minLength caracteres para buscar ...",
         showOnFocus: false,
-        /**show empty msg or nothing*/
-        //showNoResultMsg: true,//@todo
-        /** Enables/ disables the container */
-        disabled: false,
+        disabled: false,/**container is Enabled/disabled*/
     };
 
     /**
@@ -70,8 +66,8 @@ var JSuggest = (function () {
      */
     function setConfig(opt, src) {
         let key, found, ret={};
-        //config in argguments || dataset
-        for(key in config){
+
+        for(key in config){//config in argguments || dataset
             ret[key]= config[key];
             if((found = src.getAttribute('data-'+key))){
                 ret[key]= found;
@@ -200,7 +196,7 @@ var JSuggest = (function () {
         /**
          * Get JsonApiSpec template if exists, else, use default toString method
          * @param {JsonApiSpec} spec
-         * @return {JSuggestFormatter|null}
+         * @return {function|null}
          */
         function getTemplate(spec){
             return (templates.hasOwnProperty(spec.type)) ? new templates[spec.type](spec) : null;
@@ -244,7 +240,6 @@ var JSuggest = (function () {
     })();
 
     /**
-     * @todo hacer un evento para modificar retornar div con formatos...
      * @param {JsonApiSpec} spec
      * @param {int} index
      * @return {HTMLElement}
@@ -259,11 +254,6 @@ var JSuggest = (function () {
          * @type {HTMLElement}
          */
         el= createElement$1('div', {
-            // 'data-jsuggest': JSON.stringify(spec),
-            // html:  html,
-            style:{
-                'font-size': '.7em'
-            },
             idx: spec.get('id'),
             'data-index': index,
             tabIndex:-1
@@ -277,6 +267,9 @@ var JSuggest = (function () {
         }
     }
 
+    /**
+     * @this {JSuggest}
+     */
     function updateSelected() {
         let vars= this.vars,
             elms= this.elms,
@@ -402,14 +395,11 @@ var JSuggest = (function () {
      */
     function startFetch(trigger/*1== Focus, 0== other input Keyboard */) 
     {
-
         // if multiple keys were pressed, before we get update from server,
         // this may cause redrawing our autocomplete multiple times after the last key press.
         // to avoid this, the number of times keyboard was pressed will be
         // saved and checked before redraw our autocomplete box.
-        
-        
-        let val= this.elms.realInput.value, 
+        let val= this.elms.realInput.value,
         that= this,
         savedKeypressCounter= ++this.vars.keypressCounter;
 
@@ -440,9 +430,6 @@ var JSuggest = (function () {
                 }else {
                     console.log('Nada que buscar');
                 }
-                
-
-
             }, trigger === 0 /* Keyboard */ ? that.config.debounceWaitMs : 300);
         }
         else {
@@ -464,16 +451,18 @@ var JSuggest = (function () {
 
         // abort request while typing
         try {this.vars.req.abort(); } catch(e){}
-        //new request
-        this.vars.req = xhr =  new XMLHttpRequest();
+
+        this.vars.req = xhr =  new XMLHttpRequest();//new request
+
         //responseType='json' ante una excepción sólo devuelve status y statusText
         //lo malo. En dev te resta información
         //lo bueno. En prod no muestra errores internos
+
         xhr.responseType='json';
 
         xhr.onload = () => {
             if (xhr.status >= 200 && xhr.status < 300) {
-                res= xhr.response;
+                res= xhr;
                 //para debug comentar xhr.responseType='json' y descomentar aquí
                 //  res= xhr.response.hasOwnProperty('data')? xhr.response : JSON.parse(xhr.response),
                 jam= new JsonApiManager(res.data, res.included);
@@ -484,7 +473,7 @@ var JSuggest = (function () {
                 //     JError(xhr).show()
                 // }else{
                 alert(`Error ${xhr.status} : ${xhr.statusText}`);
-                // }_re
+                // }
             }
         };
 
@@ -501,6 +490,7 @@ var JSuggest = (function () {
 
     /**
      * @param {JsonApiSpec} spec
+     * @this {JSuggest}
      */
     function setItemValue(spec) 
     {
@@ -573,6 +563,8 @@ var JSuggest = (function () {
 
     /**
      * Select the next item in suggestions
+     *
+     * @this {JSuggest}
      */
     function selectNext() {
         let vars = this.vars;
@@ -592,7 +584,6 @@ var JSuggest = (function () {
         }
     }
 
-    //########  EVENTS  ########//
     var l = {
         /**
          * @param {Event} ev
@@ -703,13 +694,6 @@ var JSuggest = (function () {
                 }
             }, 200);
         },
-        // /**@todo 
-        //  * @param {Event} ev
-        //  * @this JSuggest
-        //  */
-        // function resizeListener(ev) {
-        //     if (!!this.nodes.container.parentNode)  this.update()
-        // }
         /**
          * @param {Event} ev
          * @this JSuggest
@@ -750,9 +734,6 @@ var JSuggest = (function () {
         },
 
         /**
-         * Para borrar los valores jsuggest en un formulario no vale con el.value=''
-         * Necesita document.querySelector('.jsuggest-false-input).dispatchEvent(new Event('change', {cancelable: true}));
-         * No consigo que lanzar el evento change de otra manera
          * @param {Event} ev
          * @this JSuggest
          * @returns void
@@ -867,10 +848,7 @@ var JSuggest = (function () {
 
         container.style.display= 'none';
 
-        //---
         falseGroup.appendChild(falseInput);
-        //falseGroup.appendChild(falseClear) problemas con bootstrap
-        //---
         //set custom width
         if(config.width){
             createElement$1(falseInput, {
@@ -878,7 +856,8 @@ var JSuggest = (function () {
             });
 
         }
-        //--
+
+
         src.style.display= 'none';
         dropdowncontent.style.display= 'none';
         dropdown.appendChild(src);
@@ -892,16 +871,10 @@ var JSuggest = (function () {
 
         window.addEventListener('load', function() {//prevent scroll bar
             updateDropDownWidth(falseInput, dropdowncontent);
-            // let rect= falseInput.getBoundingClientRect();
-            // dropdowncontent.style.width=  rect.width+'px';
-            //falseClear.style.height= rect.height+'px';
         });
 
         window.addEventListener('resize', function() {//prevent scroll bar
             updateDropDownWidth(falseInput, dropdowncontent);
-            // let rect= falseInput.getBoundingClientRect();
-            // dropdowncontent.style.width=  rect.width+'px';
-            //falseClear.style.height= rect.height+'px';
         });
 
         return {
@@ -910,7 +883,7 @@ var JSuggest = (function () {
             container: container,
             dropdown: dropdown,
             dropdowncontent: dropdowncontent,
-            falseClear: null,//falseClear;
+            falseClear: null,
             falseInput: falseInput,
             parentNode: parentNode,
             realInput:realInput,
@@ -1047,7 +1020,7 @@ var JSuggest = (function () {
             li[i]= l[i].bind(this);
          }
 
-        // setup event handlers
+        // add event handlers
         elms.container.addEventListener("focus", li.containerFocusListener);
         if(elms.hasOwnProperty('falseClear') && elms.falseClear) elms.falseClear.addEventListener("click", li.falseClearClickListener);
         elms.falseInput.addEventListener('search', li.falseClearClickListener);//nuevo
@@ -1127,16 +1100,16 @@ var JSuggest = (function () {
        }
        if(this.vars.selected!== spec) this.vars.selected= spec;
 
-       let tpl= suggestCache.getTemplate(spec);
+        let tpl= suggestCache.getTemplate(spec).
+            e= createElement$1(this.elms.falseInput,
+            {
+                value: spec.toString(),
+                title: spec.toString() + '. ' + spec.id,
+                idx: spec.id
+            }
+        );
 
-
-       let e= createElement(this.elms.falseInput, {
-           value: spec.toString(),
-           title: spec.toString() + '. ' + spec.id,
-           idx: spec.id
-       });
-
-       if(tpl){
+        if(tpl){
            tpl.setInput(e);
        }
 

@@ -1,4 +1,4 @@
-import {elms, setConfig, vars} from "./globals.js";
+import {setConfig, vars} from "./globals.js";
 import wrapSourceElement from "./elm.wrapSourceElm.js";
 import setFalseInput from "./elm.setFalseInput.js";
 import syncAttributes from "./elm.syncAttributes.js";

@@ -1,5 +1,8 @@
 import listeners from "./event.listeners.js";
 
+/**
+ * @this {JSuggest}
+ */
 export default function updateSelected() {
     let vars= this.vars,
         elms= this.elms,

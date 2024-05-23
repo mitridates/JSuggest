@@ -1,5 +1,6 @@
 import setSourceValue from "./elm.setSourceValue.js";
 import JSuggestCache from "./cache.js";
+import createElement from "./elm.createElement.js";
 /**
  * @this {JSuggest} 
  * @param {JsonApiSpec} spec
@@ -11,16 +12,16 @@ export default  function setValue(spec){
    }
    if(this.vars.selected!== spec) this.vars.selected= spec
 
-   let tpl= JSuggestCache.getTemplate(spec)
+    let tpl= JSuggestCache.getTemplate(spec).
+        e= createElement(this.elms.falseInput,
+        {
+            value: spec.toString(),
+            title: spec.toString() + '. ' + spec.id,
+            idx: spec.id
+        }
+    );
 
-
-   let e= createElement(this.elms.falseInput, {
-       value: spec.toString(),
-       title: spec.toString() + '. ' + spec.id,
-       idx: spec.id
-   })
-
-   if(tpl){
+    if(tpl){
        tpl.setInput(e)
    }
 

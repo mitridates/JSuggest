@@ -3,6 +3,7 @@ import createElement from "./elm.createElement.js";
 
 /**
  * @param {JsonApiSpec} spec
+ * @this {JSuggest}
  */
 export default function setItemValue(spec) 
 {

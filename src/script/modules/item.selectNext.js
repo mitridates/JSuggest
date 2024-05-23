@@ -1,6 +1,8 @@
 
 /**
  * Select the next item in suggestions
+ *
+ * @this {JSuggest}
  */
 export default function selectNext() {
     let vars = this.vars;

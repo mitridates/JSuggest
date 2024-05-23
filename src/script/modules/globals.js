@@ -31,11 +31,10 @@ let vars={
     items:[]
 };
 
-
 /**
  * @constant {Object} elms
  */
-export const elms= {
+export let elms= {
     /** @prop {HTMLElement} */source:null,
     /** @prop {HTMLElement} */copy: null,
     /** @prop {HTMLElement} */parentNode: null,
@@ -50,7 +49,7 @@ export const elms= {
 /**
  * @constant {Object} config
  */
-export const config= {
+export let config= {
     /**  Sets the width of the container */
     width: null,
     /**
@@ -67,15 +66,11 @@ export const config= {
     method: 'POST',
     debounceWaitMs: 300,
     minLen: 3,
-    // maxHeight: 180,
     noResults: "No result found...",
     placeholder: '',
     searchPlaceholder: "minLength caracteres para buscar ...",
     showOnFocus: false,
-    /**show empty msg or nothing*/
-    //showNoResultMsg: true,//@todo
-    /** Enables/ disables the container */
-    disabled: false,
+    disabled: false,/**container is Enabled/disabled*/
 };
 
 /**
@@ -84,8 +79,8 @@ export const config= {
  */
 export function setConfig(opt, src) {
     let key, found, ret={};
-    //config in argguments || dataset
-    for(key in config){
+
+    for(key in config){//config in argguments || dataset
         ret[key]= config[key];
         if((found = src.getAttribute('data-'+key))){
             ret[key]= found;

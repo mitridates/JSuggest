@@ -15,10 +15,6 @@ export default function renderItem(spec, index) {
      * @type {HTMLElement}
      */
     el= createElement('div', {
-        class:'jsuggest-item',
-        style:{
-            'font-size': '.7em'
-        },
         idx: spec.get('id'),
         'data-index': index,
         tabIndex:-1
