@@ -82,7 +82,7 @@ export function fetchXhr(text, fetchCallback, trigger) {
 
     xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-            res= xhr;
+            res= xhr.response;
             //para debug comentar xhr.responseType='json' y descomentar aquí
             //  res= xhr.response.hasOwnProperty('data')? xhr.response : JSON.parse(xhr.response),
             jam= new JsonApiManager(res.data, res.included)
